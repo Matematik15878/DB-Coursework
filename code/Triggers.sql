@@ -27,7 +27,7 @@ VALUES ('2023-12-30', '12:00', 'BC45', 'UVWX', '1Q6LHSY9F6', NULL, NULL, 'B');
 DROP TRIGGER IF EXISTS check_theoretical_exam_trigger ON log_of_practical_exams;
 DROP FUNCTION IF EXISTS check_theoretical_exam_success();
 
--- Функція для тригера на вставку елемента в log_of_theoretical_exams--
+-- Функція для тригера на вставку елемента в log_of_theoretical_exams --
 CREATE OR REPLACE FUNCTION check_ability_to_drive()
 RETURNS TRIGGER AS $$
 BEGIN
@@ -238,7 +238,7 @@ BEGIN
     ELSIF NEW.exam_grade < 18 AND NEW.success_marker IS NOT FALSE THEN
         IF NEW.success_marker IS NOT FALSE THEN
             NEW.success_marker := FALSE;
-            RAISE NOTICE 'Success marker set to FALSE due to less than 17 correct answers';
+            RAISE NOTICE 'Success marker set to FALSE due to less than 18 correct answers';
         END IF;
     END IF;
     RETURN NEW;

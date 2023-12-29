@@ -162,30 +162,29 @@ JOIN (
 -- 17 Виведення тих, хто здавав на посвідчення на вантажівці --
 CREATE TEMP TABLE temp_variables AS
 SELECT 'Truck' AS type_of_transport;
-SELECT pi.last_name, pi.first_name, pi.middle_name, subquery.category_of_transport, tv.type_of_transport
-FROM practical_exam_inspector pi
+SELECT a.last_name, a.first_name, a.middle_name, subquery.category_of_transport, tv.type_of_transport
+FROM applicant a
 JOIN (
-    SELECT le.inspector_id, t.category_of_transport
+    SELECT le.applicant_id, t.category_of_transport, t.purpose_of_transport
     FROM log_of_practical_exams le
     JOIN transport t ON le.transport_id = t.transport_id
-    JOIN temp_variables tv ON t.purpose_of_transport = tv.type_of_transport
-) AS subquery ON pi.inspector_id = subquery.inspector_id
-JOIN temp_variables tv ON true;
+) AS subquery ON a.applicant_id = subquery.applicant_id
+JOIN temp_variables tv ON subquery.purpose_of_transport = tv.type_of_transport;
 DROP TABLE temp_variables;
 
 -- 18 Виведення усіх, хто має групу крові 2+ --
-CREATE TEMP TABLE temp_blood_group AS
-SELECT 2 AS group_of_blood, '+' AS rhesus_factor;
+CREATE TEMP TABLE temp_blood_group (group_of_blood VARCHAR(2));
+INSERT INTO temp_blood_group VALUES ('2+');
+INSERT INTO temp_blood_group VALUES ('4-');
 SELECT a.last_name, 
        a.first_name, 
        a.middle_name, 
-       tbg.group_of_blood || tbg.rhesus_factor AS blood
+       tbg.group_of_blood AS blood
 FROM applicant a, temp_blood_group tbg
 WHERE EXISTS ( SELECT 1
                FROM medical_certificates mc
                WHERE mc.person_id = a.applicant_id
-                  AND mc.group_of_blood = tbg.group_of_blood
-                  AND mc.rhesus_factor = tbg.rhesus_factor);
+                  AND tbg.group_of_blood = CONCAT(mc.group_of_blood, mc.rhesus_factor));
 DROP TABLE temp_blood_group;
 
 -- 19 Виведення машини, на якій проведено найбільше екзаменів --

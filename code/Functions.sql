@@ -150,9 +150,9 @@ BEGIN
     RETURN NOT marker;
 END;
 $$ LANGUAGE plpgsql;
--- Перевірка, чи зайнятий інспектор 6 січня о 16:25 
+-- Перевірка, чи зайнятий транспорт 6 січня о 16:25 
 SELECT is_transport_available('Q7R8', '2024-01-06', '16:25');
--- Перевірка, чи зайнятий інспектор 6 січня о 16:10 
+-- Перевірка, чи зайнятий транспорт 6 січня о 16:10 
 SELECT is_transport_available('Q7R8', '2024-01-06', '16:10');
 -- Видалення функції 
 DROP FUNCTION is_transport_available;
